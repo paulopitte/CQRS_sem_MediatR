@@ -2,14 +2,9 @@
 
 [Route("api/[controller]")]
 [ApiController]
-public class ProductsController : ControllerBase
+public class ProductsController(IDispatcher dispatcher) : ControllerBase
 {
-    private readonly IDispatcher _dispatcher;
-
-    public ProductsController(IDispatcher dispatcher)
-    {
-        _dispatcher = dispatcher;
-    }
+    private readonly IDispatcher _dispatcher = dispatcher;
 
     //    Na ASP.NET Core, ao usar [FromBody], o framework já:
     //    Desserializa o JSON do corpo da requisição
@@ -82,7 +77,7 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
-    // Estamos seguindo o padrão Command-Query Responsibility Segregation, onde:
+    //  Padrão Command-Query Responsibility Segregation, onde:
     //  Toda operação é representada por um objeto(command ou query)
     //  Mesmo consultas vazias são objetos explícitos
     //  Uniformidade no tratamento de todas as requisições

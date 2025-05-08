@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-namespace CQRS_sem_MediatR.Repositories;
+﻿namespace CQRS_sem_MediatR.Repositories;
 
 public class ProductRepository(AppDbContext context) : IProductRepository
 {
@@ -26,7 +25,7 @@ public class ProductRepository(AppDbContext context) : IProductRepository
     {
         return await _context.Products
             .Include(p => p.Category)
-            .AsNoTracking()
+            .AsNoTrackingWithIdentityResolution()
             .ToListAsync();
     }
 
@@ -34,7 +33,7 @@ public class ProductRepository(AppDbContext context) : IProductRepository
     {
         var product = await _context.Products
             .Include(p => p.Category)
-            .AsNoTracking()
+            .AsNoTrackingWithIdentityResolution()
             .FirstOrDefaultAsync(p => p.Id == id);
 
         return product ?? throw new KeyNotFoundException($"Produto com ID {id} não encontrado.");
@@ -45,7 +44,7 @@ public class ProductRepository(AppDbContext context) : IProductRepository
         return await _context.Products
             .Include(p => p.Category)
             .Where(p => p.CategoryId == categoryId)
-            .AsNoTracking()
+            .AsNoTrackingWithIdentityResolution()
             .ToListAsync();
     }
 
