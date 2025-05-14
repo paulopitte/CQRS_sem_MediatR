@@ -1,6 +1,6 @@
 ﻿namespace CQRS_sem_MediatR.Products.Commands;
 
-public record UpdateProductCommand
+public class UpdateProductCommand
 {
     public int Id { get; set; }
     public string? Name { get; set; }

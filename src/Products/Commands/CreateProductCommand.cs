@@ -1,6 +1,8 @@
-﻿namespace CQRS_sem_MediatR.Products.Commands;
+﻿using System.Text.Json.Serialization;
 
-public record CreateProductCommand
+namespace CQRS_sem_MediatR.Products.Commands;
+
+public class CreateProductCommand
 {
     public string? Name { get; set; }
     public decimal Price { get; set; }

@@ -7,7 +7,7 @@ public static class DbInitializer
 
         if (!context.Categories.Any())
         {
-            // Adicione o mesmo código do HasData aqui
+            // Adicione o mesmo código do HasData
             context.SaveChanges();
         }
     }

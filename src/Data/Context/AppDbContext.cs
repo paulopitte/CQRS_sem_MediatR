@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-namespace CQRS_sem_MediatR.Data.Context;
+﻿namespace CQRS_sem_MediatR.Data.Context;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public DbSet<Entities.Product> Products { get; set; }
+    public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

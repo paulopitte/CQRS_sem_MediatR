@@ -1,8 +1,27 @@
 ﻿namespace CQRS_sem_MediatR.Repositories;
 
-public class ProductRepository(AppDbContext context) : IProductRepository
+public interface IProductRepository
 {
-    private readonly AppDbContext _context = context;
+    Task<Product> CreateProductAsync(Product product);
+    Task<Product> UpdateProductAsync(Product product);
+    Task<bool> DeleteProductAsync(int id);
+    Task<Product?> GetProductByIdAsync(int id);
+    Task<List<Product>> GetProductsByCategoryAsync(int categoryId);
+    Task<List<Product>> GetAllProductsAsync();
+    Task<bool> CategoryExistsAsync(int categoryId);
+    Task<Product?> GetProductByNameAsync(string name);
+}
+
+
+
+public class ProductRepository : IProductRepository
+{
+    private readonly AppDbContext _context;
+
+    public ProductRepository(AppDbContext context)
+    {
+        _context = context;
+    }
 
     public async Task<Product> CreateProductAsync(Product product)
     {
@@ -25,18 +44,16 @@ public class ProductRepository(AppDbContext context) : IProductRepository
     {
         return await _context.Products
             .Include(p => p.Category)
-            .AsNoTrackingWithIdentityResolution()
+            .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task<Product> GetProductByIdAsync(int id)
+    public async Task<Product?> GetProductByIdAsync(int id)
     {
-        var product = await _context.Products
+        return await _context.Products
             .Include(p => p.Category)
-            .AsNoTrackingWithIdentityResolution()
+            .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == id);
-
-        return product ?? throw new KeyNotFoundException($"Produto com ID {id} não encontrado.");
     }
 
     public async Task<List<Product>> GetProductsByCategoryAsync(int categoryId)
@@ -44,7 +61,7 @@ public class ProductRepository(AppDbContext context) : IProductRepository
         return await _context.Products
             .Include(p => p.Category)
             .Where(p => p.CategoryId == categoryId)
-            .AsNoTrackingWithIdentityResolution()
+            .AsNoTracking()
             .ToListAsync();
     }
 
@@ -53,5 +70,15 @@ public class ProductRepository(AppDbContext context) : IProductRepository
         _context.Products.Update(product);
         await _context.SaveChangesAsync();
         return product;
+    }
+    public async Task<Product?> GetProductByNameAsync(string name)
+    {
+        return await _context.Products
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Name == name);
+    }
+    public async Task<bool> CategoryExistsAsync(int categoryId)
+    {
+        return await _context.Categories.AnyAsync(c => c.Id == categoryId);
     }
 }

@@ -1,3 +1,6 @@
+using CQRS_sem_MediatR.Products.Caching;
+using CQRS_sem_MediatR.Products.Exceptions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
@@ -11,21 +14,23 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("InMemoryDb"));
 
 
-// Add repositories
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-// Registre suas dependências
-//builder.Services.AddScoped<ICommandHandler<CreateProductCommand>, CreateProductCommandHandler>();
-//builder.Services.AddScoped<ICommandHandler<UpdateProductCommand>, UpdateProductCommandHandler>();
-//builder.Services.AddScoped<ICommandHandler<DeleteProductCommand>, DeleteProductCommandHandler>();
-//builder.Services.AddScoped<IQueryHandler<GetAllProductsQuery, List<Product>>, GetAllProductsQueryHandler>();
-//builder.Services.AddScoped<IQueryHandler<GetProductByIdQuery, Product?>, GetProductByIdQueryHandler>();
-//builder.Services.AddScoped<IQueryHandler<GetProductsByCategoryQuery, List<Product>>, GetProductsByCategoryQueryHandler>();
 
+// Configure a ordem EXPLÍCITA dos middlewares
+builder.Services.AddScoped<IDispatcher, Dispatcher>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+// Habilita MemoryCache no projeto
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<ICacheService, MemoryCacheService>();
+
+
+// registra os Handlers, Validator e Middlewares
 builder.Services.AddHandlers();
 
-builder.Services.AddScoped<IDispatcher, Dispatcher>();
-
 var app = builder.Build();
+
+//registrar middleware de exceção
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

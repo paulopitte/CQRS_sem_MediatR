@@ -1,2 +1,3 @@
 ﻿namespace CQRS_sem_MediatR.Products.Queries;
-public record class GetProductByIdQuery(int Id);
+
+public record GetProductByIdQuery(int Id);
