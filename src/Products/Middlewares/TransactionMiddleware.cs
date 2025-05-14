@@ -1,6 +1,4 @@
-﻿using CQRS_sem_MediatR.Data.Context;
-
-namespace CQRS_sem_MediatR.Products.Middlewares;
+﻿namespace CQRS_sem_MediatR.Products.Middlewares;
 
 public class TransactionMiddleware<TCommand> : IDispatcherCommandMiddleware<TCommand>
 {

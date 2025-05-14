@@ -1,6 +1,3 @@
-using CQRS_sem_MediatR.Products.Caching;
-using CQRS_sem_MediatR.Products.Exceptions;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
@@ -36,7 +33,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "api produtos"));
+    app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "Demostração do Fluxo do Padrao Mediate em Subtituição ao MediatR com Middlrewares em sua pipeline."));
 
     //initialize data
     using var scope = app.Services.CreateScope();

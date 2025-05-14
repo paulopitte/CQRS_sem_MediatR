@@ -1,7 +1,4 @@
-﻿using CQRS_sem_MediatR.Products.Middlewares;
-using CQRS_sem_MediatR.Products.Validations;
-
-namespace CQRS_sem_MediatR.Products;
+﻿namespace CQRS_sem_MediatR.Products;
 
 public static class ServiceCollectionExtensions
 {

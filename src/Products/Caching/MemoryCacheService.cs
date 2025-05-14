@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-
-namespace CQRS_sem_MediatR.Products.Caching;
+﻿namespace CQRS_sem_MediatR.Products.Caching;
 
 public class MemoryCacheService : ICacheService
 {

@@ -1,6 +1,4 @@
-﻿using CQRS_sem_MediatR.Products.Exceptions;
-
-namespace CQRS_sem_MediatR.Products.Queries.Handlers;
+﻿namespace CQRS_sem_MediatR.Products.Queries.Handlers;
 
 public class GetProductByIdQueryHandler : IQueryHandler<GetProductByIdQuery, Product?>
 {

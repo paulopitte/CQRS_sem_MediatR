@@ -1,7 +1,4 @@
-﻿using CQRS_sem_MediatR.Products.Caching;
-using System.Text.Json;
-
-namespace CQRS_sem_MediatR.Products.Middlewares;
+﻿namespace CQRS_sem_MediatR.Products.Middlewares;
 
 public class CachingMiddleware<TRequest, TResponse> : IDispatcherQueryMiddleware<TRequest, TResponse>
 {

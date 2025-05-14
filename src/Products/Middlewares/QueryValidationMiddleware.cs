@@ -1,6 +1,4 @@
-﻿using CQRS_sem_MediatR.Products.Exceptions;
-using CQRS_sem_MediatR.Products.Validations;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace CQRS_sem_MediatR.Products.Middlewares;
 

@@ -1,7 +1,4 @@
-﻿using CQRS_sem_MediatR.Products.Exceptions;
-using CQRS_sem_MediatR.Products.Validations;
-
-namespace CQRS_sem_MediatR.Products.Middlewares;
+﻿namespace CQRS_sem_MediatR.Products.Middlewares;
 
 // Validação para comandos
 public class CommandValidationMiddleware<TCommand> : IDispatcherCommandMiddleware<TCommand>

@@ -1,6 +1,4 @@
-﻿using CQRS_sem_MediatR.Products.Middlewares;
-
-namespace CQRS_sem_MediatR.Products;
+﻿namespace CQRS_sem_MediatR.Products;
 
 public class Dispatcher : IDispatcher
 {
