@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Caching.Hybrid;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
@@ -18,7 +20,26 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 // Habilita MemoryCache no projeto
 builder.Services.AddMemoryCache();
+
+#pragma warning disable EXCS0618 // Desativa aviso de obsolescência
+builder.Services.AddHybridCache(options =>
+{
+    options.MaximumKeyLength = 1024;
+    options.MaximumPayloadBytes = 1024 * 1024 * 10; // 10 MB
+    options.DefaultEntryOptions = new HybridCacheEntryOptions
+    {
+        Expiration = TimeSpan.FromSeconds(20),
+        LocalCacheExpiration = TimeSpan.FromSeconds(20)
+    };
+});
+#pragma warning restore EXCS0618
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+});
 builder.Services.AddScoped<ICacheService, MemoryCacheService>();
+
 
 
 // registra os Handlers, Validator e Middlewares
