@@ -1,43 +1,49 @@
 ﻿namespace CQRS_sem_MediatR.Products.Caching;
 
-public class MemoryCacheService : ICacheService
+public class MemoryCacheService(ILogger<MemoryCacheService> logger, HybridCache hybridCache) : ICacheService
 {
-    private readonly IMemoryCache _cache;
-    private readonly ILogger<MemoryCacheService> _logger;
+    private readonly HybridCache _hybridCache = hybridCache;
+    private readonly ILogger<MemoryCacheService> _logger = logger;
 
-    public MemoryCacheService(IMemoryCache cache, ILogger<MemoryCacheService> logger)
+
+    public async Task<T?> GetAsync<T>(string key)
     {
-        _cache = cache;
-        _logger = logger;
-    }
+        var tags = new List<string> { key };
+        T? result = default;
 
-    public Task<T?> GetAsync<T>(string key)
-    {
-        if (_cache.TryGetValue(key, out T? value))
-        {
-            _logger.LogInformation($"[CACHE] Recuperando chave {key}");
-            return Task.FromResult(value);
-        }
+        result = await _hybridCache.GetOrCreateAsync(
+         key,
+         async cancelationToken =>
+         {
+             _logger.LogInformation($"[CACHE] Recuperando chave {key}");
+             return await Task.FromResult((T)result!);
+         },
 
+         new HybridCacheEntryOptions
+         {
+             Expiration = TimeSpan.FromSeconds(20),
+             LocalCacheExpiration = TimeSpan.FromSeconds(20),
+             Flags = HybridCacheEntryFlags.None
+         },
+         tags);
         _logger.LogWarning($"[CACHE] Chave não encontrada: {key}");
-        return Task.FromResult(default(T));
+        return await Task.FromResult(default(T));
+
     }
 
-    //public Task SetAsync<T>(string key, T value, TimeSpan expiration)
-    //{
-    //    _cache.Set(key, value, expiration);
-    //    return Task.CompletedTask;
-    //}
 
-    public Task SetAsync<T>(string key, T value, TimeSpan expiration)
+    public async Task SetAsync<T>(string key, T value, TimeSpan expiration)
     {
         _logger.LogInformation($"[CACHE] Armazenando chave {key} com expiração de {expiration.TotalMinutes} minutos");
 
-        var cacheEntryOptions = new MemoryCacheEntryOptions()
-            .SetAbsoluteExpiration(expiration) // Define expiração fixa
-            .SetPriority(CacheItemPriority.High); // Evita remoção prematura
+        await _hybridCache.SetAsync(key, value,
+              new HybridCacheEntryOptions
+              {
+                  Expiration = expiration, //Define expiração fixa
+                  LocalCacheExpiration = TimeSpan.FromSeconds(20)
+              },
+              new[] { key });
 
-        _cache.Set(key, value, cacheEntryOptions);
-        return Task.CompletedTask;
+        await Task.CompletedTask;
     }
 }

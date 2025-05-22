@@ -10,6 +10,8 @@ global using CQRS_sem_MediatR.Products.Validations;
 global using CQRS_sem_MediatR.Products.Middlewares;
 global using CQRS_sem_MediatR.Products.Caching;
 global using Microsoft.Extensions.Caching.Memory;
+global using Microsoft.Extensions.Caching.Distributed;
+global using Microsoft.Extensions.Caching.Hybrid;
 
 
 

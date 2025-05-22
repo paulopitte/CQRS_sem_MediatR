@@ -36,7 +36,8 @@ builder.Services.AddHybridCache(options =>
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.Configuration = "localhost:6379";
+    //options.Configuration = builder.Configuration.GetConnectionString("Redis");
 });
 builder.Services.AddScoped<ICacheService, MemoryCacheService>();
 
